@@ -10,7 +10,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    number = random.randint(5, 50)
+    number = random.randint(1, 20)
     answer = number // 2
     return templates.TemplateResponse(
         "index.html",
@@ -21,7 +21,4 @@ def home(request: Request):
         }
     )
 
-if __name__ == "__main__":
-    import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+
