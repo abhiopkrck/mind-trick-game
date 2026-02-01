@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mind Trick Game</title>
+
+<style>
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #0033cc;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.sq{
+    width: 620px;
+    height: 420px;
+    background-color: rgb(32, 31, 31);
+    border: 6px solid white;
+    border-radius: 18px;
+    box-shadow: 
+        0 0 15px black,
+        0 0 30px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+    animation: pop 1s ease;
+}
+
+@keyframes pop{
+    from{transform: scale(0.85);opacity: 0;}
+    to{transform: scale(1);opacity: 1;}
+}
+
+h1{
+    color: red;
+    text-align: center;
+    font-size: 1.6rem;
+    text-shadow: 0 0 10px black;
+}
+
+#game-steps{
+    min-height: 70px;
+    font-size: 1.3rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.5s ease;
+}
+
+button {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#next-btn {
+    background: #238636;
+    box-shadow: 0 0 10px #238636;
+}
+
+#next-btn:hover {
+    background: #2ea043;
+    box-shadow: 0 0 20px #2ea043;
+    transform: scale(1.05);
+}
+
+#restart-btn {
+    background: #8957e5;
+    box-shadow: 0 0 10px #8957e5;
+    display: none;
+}
+
+#restart-btn:hover {
+    box-shadow: 0 0 20px #8957e5;
+    transform: scale(1.05);
+}
+
+#answer {
+    font-size: 1.7rem;
+    color: #ff75a0;
+    opacity: 0;
+    text-align: center;
+    text-shadow: 0 0 10px #ff75a0, 0 0 20px #ff75a0;
+    transition: opacity 1s ease;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sq">
+    <h1>🧠 Mind Trick Game</h1>
+
+    <div id="game-steps">
+        Think of any number between 1 to 1000 in your mind...
+    </div>
+
+    <button id="next-btn">NEXT STEP</button>
+    <button id="restart-btn">🔄 Restart</button>
+
+    <div id="answer"></div>
+</div>
+
+<script>
+    // Works with FastAPI + browser testing
+    const number = Number("{{ number }}" || 10);
+    const answer = Number("{{ answer }}" || 5);
+
+    const steps = [
+        "✖ Double your number",
+        `➕ Add ${number} to the result`,
+        "➗ Divide the result by 2",
+        "➖ Subtract your original number"
+    ];
+
+    let step = 0;
+    const gameStepEl = document.getElementById("game-steps");
+    const nextBtn = document.getElementById("next-btn");
+    const restartBtn = document.getElementById("restart-btn");
+    const answerEl = document.getElementById("answer");
+
+    function showStep(text) {
+        gameStepEl.style.opacity = 0;
+        gameStepEl.style.transform = "scale(0.9)";
+        setTimeout(() => {
+            gameStepEl.textContent = text;
+            gameStepEl.style.opacity = 1;
+            gameStepEl.style.transform = "scale(1)";
+        }, 400);
+    }
+
+    nextBtn.addEventListener("click", () => {
+        if (step < steps.length) {
+            showStep(steps[step]);
+            step++;
+        } else {
+            answerEl.textContent = `✨ Your Answer: ${answer} 😎`;
+            answerEl.style.opacity = 1;
+
+            nextBtn.style.display = "none";
+            restartBtn.style.display = "inline-block";
+        }
+    });
+
+    restartBtn.addEventListener("click", () => {
+        step = 0;
+        answerEl.style.opacity = 0;
+        answerEl.textContent = "";
+
+        restartBtn.style.display = "none";
+        nextBtn.style.display = "inline-block";
+
+        showStep("Think of any number between 1 to 1000 in your mind...");
+    });
+
+    showStep("Think of any number between 1 to 1000 in your mind...");
+</script>
+
+</body>
+</html>
