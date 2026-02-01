@@ -154,16 +154,10 @@ button {
         }
     });
 
-    restartBtn.addEventListener("click", () => {
-        step = 0;
-        answerEl.style.opacity = 0;
-        answerEl.textContent = "";
+   restartBtn.addEventListener("click", () => {
+    window.location.reload();
+});
 
-        restartBtn.style.display = "none";
-        nextBtn.style.display = "inline-block";
-
-        showStep("Think of any number between 1 to 1000 in your mind...");
-    });
 
     showStep("Think of any number between 1 to 1000 in your mind...");
 </script>
